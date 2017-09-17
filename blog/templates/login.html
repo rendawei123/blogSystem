@@ -1,0 +1,82 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="row login">
+    <div class="col-md-3 col-md-offset-3 padding_0">
+        <div class="row">
+            <input type="text" class="form-control username" placeholder="用户名">
+        </div>
+        <div class="row margin_top_10">
+            <input type="password" class="form-control password" placeholder="密码">
+        </div>
+        <div class="row margin_top_10">
+            <div class="col-md-5 padding_0">
+                <input type="text" class="form-control valid" placeholder="验证码">
+            </div>
+            <div class="col-md-7">
+                <img src="/valid_code/" alt="" class="valid_img">
+                <a class="refresh">刷新</a>
+            </div>
+        </div>
+        <div class="row margin_top_10">
+            <button class="yes btn btn-primary">登录</button>
+            <a class="btn btn-primary" href="/reg/">注册</a>
+        </div>
+        <div class="row margin_top_10">
+            <label>
+                <input type="checkbox"> Remember me
+            </label>
+            <span class="error"></span>
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+<script>
+    // 验证码刷新
+    $('.refresh').click(function () {
+        $('.valid_img')[0].src +='?'
+    });
+
+    $('.yes').click(function () {
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+
+        var username = $('.username').val();
+        var password = $('.password').val();
+        var valid = $('.valid').val();
+
+        $.ajax({
+            url: '/login/',
+            type: "POST",
+            data: {
+                'user': username,
+                'pwd': password,
+                'valid': valid
+            },
+            success: function (data) {
+                data = JSON.parse(data);
+{#                var local_path = data['local_path'];#}
+                if(data['user']){
+                    location.href="{{ local_path }}"
+                }
+                else{
+                    $('.error').text(data['error']).css({'color': 'red', 'margin-left': '20px'})
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

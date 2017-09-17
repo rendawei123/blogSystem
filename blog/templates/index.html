@@ -1,0 +1,208 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>index</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="title navbar-fixed-top">
+    <nav class="navbar navbar-default margin_0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Blog</a>
+        </div>
+        <ul class="t_right navbar-nav">
+            <li><a href="/login/">Link</a></li>
+            <li><a href="#">Link</a></li>
+        </ul>
+        <div class="container padding_0">
+            <div class="collapse navbar-collapse padding_0" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    {#                    {% if current_home_page_id == 0 %}#}
+                    {#                        #}
+                    {#                    {% else %}#}
+                    {#                        <li><a href="#">Link <span class="sr-only">(current)</span></a></li>#}
+                    {#                    {% endif %}#}
+                    {##}
+                    {#                    {% for type_choice in func %}#}
+                    {#                        {% if current_home_page_id == type_choice.0 %}   <!--判断如果是当前点击的标签的话加上active属性-->#}
+                    {#                            <li class="active"><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>#}
+                    {#                        {% else %}#}
+                    {#                            <li><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>#}
+                    {#                        {% endif %}#}
+                    {##}
+                    {#                    {% endfor %}#}
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li><a href="/blog/{{ request.user.username }}">欢迎 {{ request.user.username }}</a></li>
+                        <li><a href="/logout/">注销</a></li>
+                    {% else %}
+                        <li><a href="/login/">登录</a></li>
+                        <li><a href="#">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+
+    </nav>
+</div>
+<!--导航栏结束-->
+<hr class="margin_0">
+<div class="empty"></div>
+<!--内容区开始 -->
+<div class="container">
+    <!--内容标题开始 -->
+    <div class="body_up row">
+        新闻
+    </div>
+    <!--内容标题结束 -->
+
+    <!--文章区开始 -->
+    <div class="body_middle row">
+        <div class="left col-md-9">
+            <!-- 文章分类开始 -->
+            <div class="art">
+                {% for category in category_list %}
+                    <a href="#">
+                        <button class="btn btn-primary">{{ category.title }}</button><!-- 添加 -->
+                    </a>
+                {% endfor %}
+            </div>
+            <!-- 文章分类结束 -->
+            <div></div>
+            <!-- 文章列表开始 -->
+            <ul class="articles">
+                {% for article in article_list %}
+                    <hr>
+                    <li>
+                        <div class="each_article">
+                            <!-- 作者 -->
+                            <div class="author">
+                                <a class="author_head" href="/blog/{{ article.blog.user.username }}"><img
+                                        src="{{ article.blog.user.avatar.url }}"
+                                        alt=""></a>
+                                &nbsp;
+                                <div class="name">
+                                    <a href="/blog/{{ article.blog.user.username }}">{{ article.blog.user.nickname }}</a>
+                                    &nbsp
+                                    <span>{{ article.create_time|date:'Y-m-d' }}</span>
+                                </div>
+                            </div>
+                            <!-- 文章标题 -->
+                            <a href="/blog/{{ article.blog.user.username }}/article/{{ article.nid }}"
+                               class="article_title">
+                                {{ article.title }}
+                            </a>
+                            <!-- 文章内容 -->
+                            <p class="article_detail">
+                                {{ article.desc }}
+                            </p>
+                            <!-- 点赞及其他 -->
+                            <div class="other">
+                                <a href="#">{{ article.category }}</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-eye-open"></span> {{ article.read_count }}
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span
+                                        class="glyphicon glyphicon-comment"></span> {{ article.comment_count }}</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-heart-empty"></span> 9</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-thumbs-up"></span> {{ article.up_count }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+
+                {% endfor %}
+            </ul>
+            <!-- 文章列表结束 -->
+        </div>
+        <div class="right col-md-3 padding_0">
+            <!-- 右侧开始 -->
+            <div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                   aria-expanded="true" aria-controls="collapseOne">
+                                    Collapsible Group Item #1
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                             aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Collapsible Group Item #2
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                2
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Collapsible Group Item #3
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                广告
+            </div>
+            <!-- 右侧结束 -->
+        </div>
+    </div>
+    <!--文章区结束 -->
+
+    <!--底部开始 -->
+    <div class="body_down row">
+        底部 联系我们
+    </div>
+    <!--底部结束 -->
+</div>
+<!--内容区结束 -->
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+</body>
+</html>

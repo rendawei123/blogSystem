@@ -1,0 +1,333 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>back</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/back.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<!-- 标题栏开始 -->
+<nav class="navbar navbar-inverse navbar-fixed-top m">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">后台管理系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+                <li><a href="#" class="r">关注</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">消息<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">系统信息</a></li>
+                        <li><a href="#">关注的人</a></li>
+                        <li><a href="#">邮箱</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {#            <form class="navbar-form navbar-left">#}
+            {#                <div class="form-group">#}
+            {#                    <input type="text" class="form-control" placeholder="Search">#}
+            {#                </div>#}
+            {#                <button type="submit" class="btn btn-default">搜索书店</button>#}
+            {#            </form>#}
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active r"><a href="#">欢迎你 {{ request.user }}<span class="sr-only">(current)</span></a></li>
+                <li><a href="/logout/">退出</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">我的的书架 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">武侠</a></li>
+                        <li><a href="#">动漫</a></li>
+                        <li><a href="#">小黄书</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+
+</nav>
+<!-- 标题栏结束 -->
+<div id="empty"></div>
+
+
+<div class="container-fulid">
+    <div class="row">
+
+        <!-- 左侧菜单开始 -->
+        <div class="col-md-2">
+
+            <div class="panel panel-default m1">
+                <div class="panel-heading" role="tab" id="collapseListGroupHeading1">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup1"
+                           aria-expanded="false" aria-controls="collapseListGroup1"><font><font class="">
+                            个人信息
+                        </font></font>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseListGroup1" class="panel-collapse collapse" role="tabpanel"
+                     aria-labelledby="collapseListGroupHeading1" aria-expanded="false" style="height: 0px;">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            个人简介
+                        </li>
+                        <li class="list-group-item">
+
+                            修改密码
+
+                        </li>
+                        <li class="list-group-item">
+
+                            love
+
+                        </li>
+                    </ul>
+                    <div class="panel-footer">
+
+                        页脚
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default m1">
+                <div class="panel-heading" role="tab" id="collapseListGroupHeading3">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup3"
+                           aria-expanded="false" aria-controls="collapseListGroup3"><font><font class="">
+                            文章管理
+                        </font></font>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseListGroup3" class="panel-collapse collapse" role="tabpanel"
+                     aria-labelledby="collapseListGroupHeading3" aria-expanded="false" style="height: 0px;">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <font>
+                                <font>Bootply</font>
+                            </font>
+                        </li>
+                        <li class="list-group-item">
+                            <font>
+                                <font>一个itmus交流facilin</font>
+                            </font>
+                        </li>
+                        <li class="list-group-item">
+                            <font>
+                                <font>sex</font>
+                            </font>
+                        </li>
+                    </ul>
+                    <div class="panel-footer">
+                        <font>
+                            <font>页脚</font>
+                        </font>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default m1">
+                <div class="panel-heading" role="tab" id="collapseListGroupHeading2">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup2"
+                           aria-expanded="false" aria-controls="collapseListGroup2"><font><font class="">
+                            出版社管理
+                        </font></font>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseListGroup2" class="panel-collapse collapse" role="tabpanel"
+                     aria-labelledby="collapseListGroupHeading2" aria-expanded="false" style="height: 0px;">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <font>
+                                <font>Bootply</font>
+                            </font>
+                        </li>
+                        <li class="list-group-item">
+                            <font>
+                                <font>一个itmus交流facilin</font>
+                            </font>
+                        </li>
+                        <li class="list-group-item">
+                            <font>
+                                <font>额</font>
+                            </font>
+                        </li>
+                    </ul>
+                    <div class="panel-footer">
+                        <font>
+                            <font>页脚</font>
+                        </font>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 左侧菜单结束 -->
+
+        <div class="col-md-9" id="r1">
+
+            <!-- 操作栏开始 -->
+            <div>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索文章</button>
+                </form>
+                <a href="/write_article/">
+                    <button type="button" class="btn btn-default navbar-btn r" id="add">
+                        添加文章
+                    </button>
+                </a>
+            </div>
+            <!-- 操作栏结束 -->
+
+
+            <!-- 表格开始 -->
+            <table class="table table-hover" id="lib">
+                <tr>
+                    <th>文章题目</th>
+                    <th>创建日期</th>
+                    <th>分类</th>
+                    <th>标签</th>
+                    <th>操作</th>
+                </tr>
+                {% for article in article_list %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+{#                        <td>{% for i in book.author.all %}#}
+{#                            {{ i.name }}#}
+{#                        {% endfor %}#}
+{#                        </td>#}
+                        <td>{{ article.create_time }}</td>
+                        <td>文章分类</td>
+                        <td>文章标签</td>
+                        <td>
+                            <button class="btn btn-primary">修改</button>
+                            <button class="btn btn-danger del">删除</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+
+            </table>
+            <!-- 表格结束 -->
+
+            <!-- 分页开始 -->
+            <div class="ps">
+                <nav aria-label="Page navigation" class="">
+                    <ul class="pagination">
+                        {% if book_list_each.has_previous %}
+                            <li>
+                                <a href="/index/?page={{ book_list_each.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">上一页</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="disabled" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">上一页</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+
+                        {% for n in p_obj.page_range %}
+                            <li><a href="/index/?page={{ n }}">{{ n }}</a></li>
+                        {% endfor %}
+
+                        {% if book_list_each.has_next %}
+                            <li>
+                                <a href="/index/?page={{ book_list_each.next_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">下一页</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="disabled" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">下一页</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- 分页结束 -->
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+<script>
+
+    $('#yes').click(function () {
+        var book_title = $('#modal_book_title').val();
+        var book_author = [];
+        $('.book_author:checked').each(function () {
+            book_author.push($(this).val())
+        });
+        var book_price = $('#model_book_price').val();
+        var book_pub_date = $('#model_book_pub_date').val();
+        var book_cf = [];
+        $('.model_book_cf:checked').each(function () {
+            book_cf.push($(this).val())
+        });
+        var book_pub = [];
+        $('.model_book_pub:checked').each(function () {
+            book_pub.push($(this).val())
+
+        });
+
+        console.log(book_title, book_author, book_price, book_pub_date, book_cf, book_pub);
+
+        $.ajax({
+            url: '/add/',
+            type: 'POST',
+            data: {
+                'title': book_title,
+                'author': JSON.stringify(book_author),
+                'price': book_price,
+                'pub_date': book_pub_date,
+                'cf': JSON.stringify(book_cf),
+                'publish': JSON.stringify(book_pub)
+            }
+        })
+    });
+
+
+    $('#lib').on('click', '.del', function () {
+
+        $(this).parent().parent().remove()
+    });
+
+</script>
+</body>
+
+</html>

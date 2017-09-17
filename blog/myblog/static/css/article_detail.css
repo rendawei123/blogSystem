@@ -1,0 +1,141 @@
+.empty {
+            height: 50px;
+        }
+
+.padding_0 {
+    padding: 0;
+}
+
+.margin_0 {
+    margin: 0;
+}
+
+.navbar-default {
+    background-color: #2b669a;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #F0F0F0;
+    background-color: #0066CC;
+}
+
+.navbar-default .navbar-brand {
+    color: #F0F0F0;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #F0F0F0;
+}
+
+.t_right {
+    float: right;
+    list-style: none;
+    padding: 15px;
+}
+
+
+
+
+.body_middle {
+    background-color: silver;
+}
+
+.left {
+    background-color: white;
+    padding: 0 20px 0 0;
+    height: 1000px;
+}
+
+
+
+.art {
+    margin-top: 20px;
+}
+.articles{
+    padding-left: 0;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: large;
+}
+
+.articles li {
+
+    background-color: white;
+    list-style: none;
+    padding-left: 0;
+}
+
+.name {
+    display: inline-block;
+}
+
+.article_title {
+    display: inline-block;
+    font-size: x-large;
+    font-weight: 900;
+    color: #0f0f0f;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.body_down {
+    background-color: #2b669a;
+    height: 50px;
+}
+
+.author_head img {
+    width: 50px;
+    height: 50px;
+}
+
+.title_other{
+    width: 60%;
+    /*background-color: yellow;*/
+    float: left;
+}
+
+.read_message{
+    width: 293px;
+    height: 143px;
+    float: right;
+    background-color: #5cb85c;
+}
+.other{
+    font-size: large;
+}
+
+.all_msg {
+    list-style: none;
+}
+.comment{
+    margin-top: 50px;
+    /*height: 300px;*/
+    padding: 20px 20px 20px 0;
+    /*background-color: #8a6d3b;*/
+}
+.comment_author{
+    display: inline-block;
+}
+.comment_author_info{
+    display: inline-block;
+    vertical-align:middle;
+    margin-bottom: 0;
+
+}
+.comment_text{
+    margin-top: 10px;
+}
+
+.padding_left_0 {
+    padding-left: 0;
+}
+
+.root_comment_box{
+    height: 100px;
+}
+
+.child_comment{
+    border-left: solid #BEBEBE 2px;
+    padding: 20px;
+}

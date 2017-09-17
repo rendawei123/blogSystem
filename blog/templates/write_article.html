@@ -1,0 +1,64 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>write</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'kindeditor-4.1.10/kindeditor-all.js' %}"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .head {
+
+            text-align: center;
+            line-height: 50px;
+            vertical-align: middle
+        }
+
+        .input_title {
+            height: 50px;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+<form action="/write_article/" method="post">
+    {% csrf_token %}
+    <div class="head">
+        <h3>写文章</h3>
+    </div>
+    <div class="title">
+        <input name="title" class="input_title" type="text" placeholder="文章标题">
+    </div>
+    <div>
+        <textarea name="article_content" class="body" id="article_content">
+        </textarea>
+    </div>
+    <p><input type="submit"></p>
+</form>
+
+
+<script>
+    KindEditor.create('#article_content', {
+        width: '1000px',
+        height: '600px',
+        uploadJson: '/upload_file/',
+        // 添加额外的上传文件参数
+        extraFileUploadParams: {
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        }
+    })
+</script>
+
+{#<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>#}
+{#<script src="{% static 'dist/js/bootstrap.js' %}"></script>#}
+
+</body>
+</html>

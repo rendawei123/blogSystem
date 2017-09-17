@@ -1,0 +1,193 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HomeSite</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/home_site.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="title navbar-fixed-top">
+    <nav class="navbar navbar-default margin_0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">个人主页</a>
+        </div>
+        <ul class="t_right navbar-nav">
+            <li><a href="/login{{ request.path }}">Link</a></li>
+            <li><a href="#">Link</a></li>
+        </ul>
+        <div class="container padding_0">
+            <div class="collapse navbar-collapse padding_0" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% if current_home_page_id == 0 %}
+                        <li class="active"><a href="/index/">首页 <span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li><a class="active" href="/index/">首页 <span class="sr-only">(current)</span></a></li>
+                    {% endif %}
+
+                    {% for type_choice in func %}
+                        {% if current_home_page_id == type_choice.0 %}   <!--判断如果是当前点击的标签的话加上active属性-->
+                            <li class="active"><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>
+                        {% else %}
+                            <li><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>
+                        {% endif %}
+
+                    {% endfor %}
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li><a href="#">欢迎 {{ request.user.username }}</a></li>
+                        <li><a href="/back/">后台管理</a></li>
+                        <li><a href="/logout/{{ request.path }}">注销</a></li>
+                    {% else %}
+                        <li><a href="/login/{{ request.path }}">登录</a></li>
+                        <li><a href="#">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+
+    </nav>
+</div>
+<!--导航栏结束-->
+<hr class="margin_0">
+<div class="empty"></div>
+<!--内容区开始 -->
+<div class="container">
+    <!--文章区开始 -->
+    <div class="body_middle row">
+        <div class="left col-md-9">
+            <!-- 个人信息开始 -->
+            <div class="art">
+                <img src="{{ user.avatar.url }}" style="width: 100px;" alt="">
+                <span class="user_message">
+                    <div class="name">{{ user.username }}</div>
+                    <ul class="all_msg">
+                        <li><a href="#">成长值 {{ user.create_time|date:'Y-m-d' }}</a></li>
+                        <li><a href="#">关注 0</a></li>
+                        <li><a href="#">粉丝 0</a></li>
+                        <li><a href="#">文章 1</a></li>
+                        <li><a href="#">收获喜欢 0</a></li>
+                    </ul>
+                </span>
+            </div>
+            <!-- 个人信息结束 -->
+            <div></div>
+            <!-- 文章列表开始 -->
+            <ul class="articles">
+                {% for article in article_list %}
+                    <hr>
+                    <li>
+                        <div class="each_article">
+                            <!-- 文章标题 -->
+                            <a href="/blog/{{ article.blog.user.username }}/article/{{ article.nid }}" class="article_title">
+                                {{ article.title }}
+                            </a>
+                            <!-- 文章内容 -->
+                            <p class="article_detail">
+                                {{ article.desc }}
+                            </p>
+                            <!-- 点赞及其他 -->
+                            <div class="other">
+                                <a href="#">{{ article.category }}</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-eye-open"></span> {{ article.read_count }}
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span
+                                        class="glyphicon glyphicon-comment"></span> {{ article.comment_count }}</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-heart-empty"></span> 9</a>
+                                &nbsp;&nbsp;
+                                <a href="#"><span class="glyphicon glyphicon-thumbs-up"></span> {{ article.up_count }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+
+                {% endfor %}
+            </ul>
+            <!-- 文章列表结束 -->
+        </div>
+        <!--右侧分类区开始-->
+        <div class="right col-md-3 padding_0">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">随笔分类</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list">
+                        {% for category_result in category_result_list %}
+                            <li>
+                                <a href="/blog/{{ user.username }}/article/category/{{ category_result.1 }}">
+                                    {{ category_result.0 }}
+                                </a> &nbsp;{{ category_result.2 }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">标签分类</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list">
+                        {% for tag_result in tag_result_list %}
+                            <li>
+                                <a href="/blog/{{ user.username }}/article/tags/{{ tag_result.1 }}">
+                                    {{ tag_result.0 }}
+                                </a>
+                                 &nbsp;{{ tag_result.2 }}
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">日期分类</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list">
+                        {% for date in date_list %}
+                            <li>{{ date }}</li>
+                        {% endfor %}
+
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">收藏</h3>
+                </div>
+                <div class="panel-body">
+                    2
+                </div>
+            </div>
+        </div>
+        <!--右侧分类区结束-->
+    </div>
+    <!--文章区结束 -->
+</div>
+<!--内容区结束 -->
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+</body>
+</html>

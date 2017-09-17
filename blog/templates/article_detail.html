@@ -1,0 +1,505 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>article_detail</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/article_detail.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="title navbar-fixed-top">
+    <nav class="navbar navbar-default margin_0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Blog</a>
+        </div>
+        <ul class="t_right navbar-nav">
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+        </ul>
+        <div class="container padding_0">
+            <div class="collapse navbar-collapse padding_0" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% if current_home_page_id == 0 %}
+                        <li class="active"><a href="/index/">首页 <span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li><a href="/index/">首页 <span class="sr-only">(current)</span></a></li>
+                    {% endif %}
+
+                    {% for type_choice in func %}
+                        {% if current_home_page_id == type_choice.0 %}   <!--判断如果是当前点击的标签的话加上active属性-->
+                            <li class="active"><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>
+                        {% else %}
+                            <li><a href="/blog/{{ type_choice.0 }}">{{ type_choice.1 }}</a></li>
+                        {% endif %}
+
+                    {% endfor %}
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li><a href="/blog/{{ request.user.blog.site }}/{{ request.user.blog.nid }}">欢迎 {{ request.user.username }}</a></li>
+                        <li><a href="/back/">后台管理</a></li>
+                        <li><a href="/logout/{{ request.path }}">注销</a></li>
+                    {% else %}
+                        <li><a href="/login/{{ request.path }}">登录</a></li>
+                        <li><a href="#">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+
+    </nav>
+</div>
+<!--导航栏结束-->
+<hr class="margin_0">
+<div class="empty"></div>
+<!--内容区开始 -->
+<div class="container">
+    <!--内容标题开始 -->
+    <div class="body_up row">
+        <div class="title_other">
+            <!-- 文章分类开始 -->
+            <div class="art">
+
+                <a href="#">
+                    <button class="btn btn-primary">标签</button><!-- 添加 -->
+                </a>
+
+            </div>
+            <!-- 文章分类结束 -->
+            <!--标题开始-->
+            <div>
+                <h2>{{ article_obj.title }}</h2>
+            </div>
+            <!--标题结束-->
+        </div>
+
+        <div class="read_message">
+            <h3>浏览信息</h3>
+        </div>
+
+    </div>
+    <!--内容标题结束 -->
+
+    <!--文章区开始 -->
+    <div class="body_middle row">
+        <div class="left col-md-9">
+            <!-- 文章开始 -->
+            <div class="articles">
+                {{ article_obj.articledetail.content }}
+            </div>
+            <!-- 文章结束 -->
+            <!--点赞及其他开始-->
+            <div class="other">
+                {% csrf_token %}
+                {#                <a href="#">{{ article.category }}</a>#}
+                {#                &nbsp;&nbsp;#}
+                <a href="#"><span class="glyphicon glyphicon-eye-open"></span> {{ article_obj.read_count }}
+                </a>
+                &nbsp;&nbsp;
+                <a href="#"><span
+                        class="glyphicon glyphicon-comment"></span> {{ article_obj.comment_count }}</a>
+                &nbsp;&nbsp;
+                <a href="#"><span class="glyphicon glyphicon-heart-empty"></span> 9</a>
+                &nbsp;&nbsp;
+                <a class="poll">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    <span class="poll_number">{{ article_obj.up_count }}</span>
+                    <span class="poll_warn"></span>
+                </a>
+            </div>
+            <!--点赞及其他结束-->
+
+            <!--评论列表开始-->
+            <div>
+                <!--评论开始-->
+                <div id="comment_list">
+                    <!--评论框开始-->
+                    <div class="comment">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                留不住你的人，留下你的评论
+                            </div>
+                            <div class="panel-body">
+                                <div class="input-group">
+                            <textarea class="form-control root_comment_box comment_content" placeholder="评论..."
+                                      aria-describedby="basic-addon2"></textarea>
+                                    <span class="input-group-addon ajax_comment" id="basic-addon2">提交</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--评论框结束-->
+
+                    {% for comment in comment_list %}
+
+                        {% if not comment.parent_id_id %}
+                            <hr>
+                            <div id="comment_1">
+                                <!--评论者信息开始-->
+                                <div class="comment_author">
+                                    <a href="#" class="comment_author_avatar">
+                                        <img src="{{ comment.user.avatar.url }}" height="40px" alt="">
+                                    </a>
+                                    <div class="comment_author_info">
+                                        <a class="comment_nickname" href="#">{{ comment.user.nickname }}</a>
+                                        <div>
+                                            <span>1楼 {{ comment.create_time|date:"Y-m-d H:i" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--评论者信息结束-->
+                                <!--评论内容开始-->
+                                <div class="comment_text">
+                                    <p><h4>{{ comment.content }}</h4></p>
+                                    <div>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                                            <span>赞</span>
+                                        </a>
+                                        &nbsp;
+                                        <a data-toggle="collapse" href="#collapseExample-{{ comment.nid }}"
+                                           aria-expanded="false" aria-controls="collapseExample">
+                                            <span class="glyphicon glyphicon-comment"></span>
+                                            <span class="reply">回复</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--评论内容结束-->
+
+                                <!--子评论框开始-->
+                                <div class="collapse" id="collapseExample-{{ comment.nid }}">
+
+                                    <div class="panel-body padding_left_0">
+                                        <div class="input-group">
+                            <textarea class="form-control text_area" placeholder="评论..."
+                                      aria-describedby="basic-addon2"></textarea>
+                                            <span class="{{ comment.nid }}"></span>
+                                            <span class="input-group-addon reply_commit" id="basic-addon2">提交回复</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--子评论框结束-->
+
+                            </div>
+
+                        {% else %}
+                            <div class="child_comment">
+                                <p>
+                                    <a href="#">{{ comment.user.nickname }}</a>
+                                    <span>{{ comment.content }}</span>
+                                </p>
+                                <div>
+                                    <span>{{ comment.create_time|date:"Y-m-d H:i" }}</span>
+                                    <a data-toggle="collapse" href="#collapseExample-{{ comment.nid }}"
+                                       aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="glyphicon glyphicon-comment"></span>
+                                        <span class="reply">回复</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!--子评论框开始-->
+                            <div class="collapse" id="collapseExample-{{ comment.nid }}">
+
+                                <div class="panel-body padding_left_0">
+                                    <div class="input-group">
+                            <textarea class="form-control text_area" placeholder="评论..."
+                                      aria-describedby="basic-addon2"></textarea>
+                                        <span class="{{ comment.nid }}"></span>
+                                        <span class="input-group-addon reply_commit" id="basic-addon2">提交回复</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--子评论框结束-->
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+                <!--评论结束-->
+            </div>
+            <!--评论列表结束-->
+        </div>
+
+        <div class="right col-md-3 padding_0">
+            <!-- 右侧开始 -->
+            <div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                   aria-expanded="true" aria-controls="collapseOne">
+                                    作者信息
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                             aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="art">
+                                    <a href="/blog/{{ blog_obj.site }}/{{ blog_obj.nid }}">
+                                        <img src="{{ blog_obj.user.avatar.url }}" style="width: 100px;" alt="">
+                                    </a>
+                                    <div class="user_message">
+                                        <a href="/blog/{{ blog_obj.site }}/{{ blog_obj.nid }}">
+                                            <div class="name">{{ blog_obj.user.nickname }}</div>
+                                        </a>
+                                        <ul class="all_msg padding_0">
+                                            <li><a href="#">成长值 {{ blog_obj.user.create_time|date:'Y-m-d' }}</a></li>
+                                            <li><a href="#">关注 0</a></li>
+                                            <li><a href="#">粉丝 0</a></li>
+                                            <li><a href="#">文章 1</a></li>
+                                            <li><a href="#">收获喜欢 0</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Collapsible Group Item #2
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                2
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                广告
+            </div>
+            <!-- 右侧结束 -->
+        </div>
+    </div>
+    <!--文章区结束 -->
+
+</div>
+<!--内容区结束 -->
+
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+<script>
+
+    // 格式化字符串函数
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length < 1) {
+            return result;
+        }
+
+        var data = arguments;       //如果模板参数是数组
+        if (arguments.length == 1 && typeof (args) == "object") {
+            //如果模板参数是对象
+            data = args;
+        }
+        for (var key in data) {
+            var value = data[key];
+            if (undefined != value) {
+                result = result.replace("{" + key + "}", value);
+            }
+        }
+        return result;
+    };
+
+    // 点赞
+    var article_id = {{ article_obj.nid }}
+        $('.poll').click(function () {
+            $.ajax({
+                url: '/blog/poll/',
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val(),
+                    'article_id': article_id
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data['flag']) {
+                        var n = parseInt($('.poll_number').text());
+                        $('.poll_number').text(n + 1)
+                    }
+                    else {
+                        $('.poll_warn').text('已经点过赞啦！').css('color', 'red')
+                        setTimeout(function () {
+                            $('.poll_warn').text('')
+                        }, 1000)
+                    }
+                }
+            })
+        });
+
+
+    //评论
+    $('#comment_list').on('click', '.ajax_comment', function () {
+        {% if request.user.is_authenticated %}
+            var comment_content = $(this).prev().val();
+            $.ajax({
+                url: '/blog/comment/',
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val(),
+                    'article_id': article_id,
+                    'comment_content': comment_content
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    var comment_user_avatar = data['comment_avatar'];
+
+                    var comment_nickname = data['comment_nickname'];
+                    var comment_create_time = data['comment_create_time'];
+                    var comment_nid = data['comment_nid'];
+                    console.log(comment_user_avatar);
+                    console.log(comment_nid);
+
+                    var s1 = '<hr>\n' +
+                        '                            <div id="comment_1">\n' +
+                        '                                <!--评论者信息开始-->\n' +
+                        '                                <div class="comment_author">\n' +
+                        '                                    <a href="#" class="comment_author_avatar">\n' +
+                        '                                        <img src="{comment_user_avatar}" height="40px" alt="">\n' +
+                        '                                    </a>\n' +
+                        '                                    <div class="comment_author_info">\n' +
+                        '                                        <a class="comment_nickname" href="#">{comment_nickname}</a>\n' +
+                        '                                        <div>\n' +
+                        '                                            <span>1楼 {comment_create_time}</span>\n' +
+                        '                                        </div>\n' +
+                        '                                    </div>\n' +
+                        '                                </div>\n' +
+                        '                                <!--评论者信息结束-->\n' +
+                        '                                <!--评论内容开始-->\n' +
+                        '                                <div class="comment_text">\n' +
+                        '                                    <p><h4>{comment_content1}</h4></p>\n' +
+                        '                                    <div>\n' +
+                        '                                        <a href="#">\n' +
+                        '                                            <span class="glyphicon glyphicon-thumbs-up"></span>\n' +
+                        '                                            <span>赞</span>\n' +
+                        '                                        </a>\n' +
+                        '                                        &nbsp;\n' +
+                        '                                        <a data-toggle="collapse" href="#collapseExample-{comment_nid1}"\n' +
+                        '                                           aria-expanded="false" aria-controls="collapseExample">\n' +
+                        '                                            <span class="glyphicon glyphicon-comment"></span>\n' +
+                        '                                            <span class="reply">回复</span>\n' +
+                        '                                        </a>\n' +
+                        '                                    </div>\n' +
+                        '                                </div>\n' +
+                        '                                <!--评论内容结束-->\n' +
+                        '\n' +
+                        '                                <!--子评论框开始-->\n' +
+                        '                                <div class="collapse" id="collapseExample-{comment_nid2}">\n' +
+                        '\n' +
+                        '                                    <div class="panel-body padding_left_0">\n' +
+                        '                                        <div class="input-group">\n' +
+                        '                            <textarea class="form-control text_area" placeholder="评论..."\n' +
+                        '                                      aria-describedby="basic-addon2"></textarea>\n' +
+                        '                                            <span class="{comment_nid3}"></span>\n' +
+                        '                                            <span class="input-group-addon reply_commit" id="basic-addon2">提交回复</span>\n' +
+                        '                                        </div>\n' +
+                        '                                    </div>\n' +
+                        '                                </div>\n' +
+                        '                                <!--子评论框结束-->\n' +
+                        '\n' +
+                        '                            </div>';
+
+                    {#                    var s = '<div>\n' +#}
+                    {#                        '    {create_time}, {data}\n' +#}
+                    {#                        '</div>';#}
+                    {#                    res = s.format({create_time:comment_create_time,data:comment_content});#}
+                    res1 = s1.format({
+                        comment_user_avatar: comment_user_avatar,
+                        comment_nickname: comment_nickname,
+                        comment_create_time: comment_create_time,
+                        comment_content1: comment_content,
+                        comment_nid1: comment_nid,
+                        comment_nid2: comment_nid,
+                        comment_nid3: comment_nid
+                    });
+                    $('#comment_list').append(res1);
+                    $('.comment_content').val('')
+                }
+            });
+
+        {% endif %}
+    });
+
+    //添加@
+    $('#comment_list').on('click', '.reply', function () {
+        var father_comment_nickname = $(this).parentsUntil('#comment_list').eq(3).find('.comment_nickname').text()
+
+        $(this).parentsUntil('#comment_list').eq(3).find('.text_area').val('@' + father_comment_nickname)
+    });
+
+
+
+
+    // 回复评论提交
+    $('#comment_list').on('click', '.reply_commit', function () {
+
+        var parent_comment_id = $(this).prev().attr('class');
+
+        var comment_content = $(this).prev().prev().val();
+
+        {% if request.user.is_authenticated %}
+
+            $.ajax({
+                url: '/blog/comment1/',
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val(),
+                    'article_id': article_id,
+                    'comment_content': comment_content,
+                    'parent_comment_id': parent_comment_id
+                },
+                success: function (data) {
+                    var s2 = '';
+
+                    $('text_area').val('');
+                }
+            });
+        {% endif %}
+    })
+
+//渲染多级评论
+    var htme = '';
+    function comment_tree(comment_list) {
+
+
+
+        $.each(comment_list, function (k, v) {
+
+        })
+    }
+
+    $(function () {
+        $.ajax({
+            url: '',
+            type: 'GET',
+            success:function (data) {
+                var my_comment_list = JSON.parse(data);
+                str1 = comment_tree(my_comment_list);
+
+                $('#comment_list').append(str1)
+
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

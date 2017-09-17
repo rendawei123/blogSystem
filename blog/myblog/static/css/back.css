@@ -1,0 +1,59 @@
+.p {
+        padding-left: 0;
+}
+
+.ps {
+    float: right;
+}
+
+.m {
+    margin-bottom: 0;
+}
+
+.m1 {
+    margin-bottom: 0;
+}
+
+.r {
+    float: right;
+}
+
+.panel-default > .panel-heading {
+    background-image: linear-gradient(to bottom, #2b669a 0, #2b669a 100%);
+    color: white;
+}
+
+.panel-heading {
+    border-left: none;
+}
+
+#empty {
+    height: 60px;
+}
+
+#r1 {
+    border: 1px black solid;
+    margin-top: 2px;
+    position: relative;
+
+}
+.navbar-inverse {
+    background-color: #2b669a;
+    border-color: #080808;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+}
+
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.article_title {
+    display: inline-block;
+    font-size: x-large;
+    font-weight: 900;
+    color: #0f0f0f;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

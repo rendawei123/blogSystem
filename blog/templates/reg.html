@@ -1,0 +1,135 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>reg</title>
+    <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/reg.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="row login">
+    <div class="col-md-3 col-md-offset-3 padding_0">
+        <form action="">
+            {% csrf_token %}
+            <div class="row">
+                {{ form_obj.username }}
+                <span></span>
+            </div>
+            <div class="row margin_top_10">
+                {{ form_obj.password }}
+                <span></span>
+            </div>
+            <div class="row margin_top_10">
+                {{ form_obj.repeat_password }}
+                <span></span>
+                <span class="all"></span>
+            </div>
+            <div class="row margin_top_10">
+                {{ form_obj.email }}
+                <span></span>
+            </div>
+            <div class="row margin_top_10 file_avatar">
+                <lable>头像</lable>
+                <img class="file_img sol" src="{% static 'img/head.jpg' %}" alt="">
+                <input type="file" class="file sol">
+            </div>
+            <div class="row margin_top_10">
+                <div class="col-md-5 padding_0">
+                    {{ form_obj.valid_code }}
+                </div>
+                <div class="col-md-7">
+                    <img src="/valid_code/" alt="" class="valid_img">
+                    <a id="ref">刷新</a>
+                </div>
+            </div>
+            <div class="row margin_top_10">
+                <a class="btn btn-primary" href="/login/">登录</a>
+{#                <a class="btn btn-primary reg">注册</a>#}
+                <input type="button" class="reg" value="注册">
+            </div>
+            <div class="row margin_top_10">
+                <span class="error"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'dist/js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.js' %}"></script>
+<script>
+    // 验证码刷新
+    $('#ref').click(function () {
+        alert('123');
+        $('.valid_img')[0].src += '?'
+    });
+
+    // 头像预览
+    // 绑定按钮改变事件
+    $('.file').change(function () {
+        // 新建文件对象
+        var reader = new FileReader();
+        // 获取已选择的文件对象
+        var first_file = $(this)[0].files[0];
+        // 将文件对象转化为路径
+        reader.readAsDataURL(first_file);
+        // 开始预览
+        reader.onload = function () {
+            $('.file_img')[0].src=this.result
+        }
+    });
+
+{#    注册验证#}
+    $('.reg').click(function () {
+
+        var username = $('#id_username').val();
+        var password = $('#id_password').val();
+        var repeat_password = $('#id_repeat_password').val();
+        var email = $('#id_email').val();
+        var valid_code = $('#id_valid_code').val();
+        var csrf = $("[name='csrfmiddlewaretoken']").val();
+        console.log(username, password, repeat_password,email,valid_code);
+
+        // 使用formdata传输文件可以传任何形式的文件，包括图片
+        var formData = new FormData();
+
+        formData.append('username',username);
+        formData.append('password',password);
+        formData.append('email',email);
+        formData.append('repeat_password',repeat_password);
+        formData.append('valid_code',valid_code);
+        formData.append('csrfmiddlewaretoken',csrf);
+        // 组装文件对象
+        formData.append('img',$('.file')[0].files[0]);
+
+
+        $.ajax({
+            url: '/reg/',
+            type: "POST",
+            data: formData,
+            processData: false,  //是否做预处理 使用formdata传输必须要这两个参数
+            contentType: false,  //规定此次传输的文件类型
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data['flag']) {
+                    location.href = '/index/'
+                }
+                else {
+                    var error_dict = data['errors'];  // {'user': error,...}
+                    console.log(error_dict)
+                    for (var i in error_dict){
+                        if(i=='__all__'){
+                            $('.all').text(error_dict[i])
+                        }
+                        console.log('#id_'+i,error_dict[i]);
+                        $('#id_'+i).next().text(error_dict[i])
+
+                    }
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>
